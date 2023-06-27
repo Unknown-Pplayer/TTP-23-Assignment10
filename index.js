@@ -13,15 +13,17 @@ const pool = new Pool({
 })
 
 app.get("/student", async (req, res) => {
-  await pool.query(
-    `select student_id, name, age, major, instructor_id, course_id`,
-    (error, result) => {
-      try {
-        res.send(result.rows);
-        console.log('hello')
-      } catch (error) {
-        console.log("Error is catched");
-      }
-    }
-  );
+  try {
+    const result = await pool.query(
+      `SELECT id, name, age, major, instructor_id, course_id FROM student`
+    );
+    res.send(result.rows);
+  } catch (error) {
+    console.log("Error is caught:", error);
+  }
 });
+
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
+
